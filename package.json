@@ -1,0 +1,18 @@
+{
+  "name": "pirate-golf-guest-portal",
+  "version": "1.0.0",
+  "description": "UniFi external captive portal that collects name, email and phone, stores them in Postgres, and authorizes the guest on a UniFi gateway (UDR7).",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "undici": "^6.21.0"
+  }
+}

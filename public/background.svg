@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2a5a"/>
+      <stop offset=".45" stop-color="#c2507a"/>
+      <stop offset=".75" stop-color="#f39a4c"/>
+      <stop offset="1" stop-color="#ffd27a"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e98a5a"/>
+      <stop offset=".25" stop-color="#2a6f8f"/>
+      <stop offset="1" stop-color="#0d3550"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fb04a"/>
+      <stop offset="1" stop-color="#2f7a33"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff6c9"/>
+      <stop offset=".6" stop-color="#ffd36b"/>
+      <stop offset="1" stop-color="#ffb347" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="1600" height="560" fill="url(#sky)"/>
+  <circle cx="800" cy="520" r="150" fill="url(#sun)"/>
+  <circle cx="800" cy="520" r="78" fill="#ffe08a"/>
+  <g fill="#ffd9c4" opacity=".55">
+    <ellipse cx="260" cy="170" rx="120" ry="22"/><ellipse cx="330" cy="150" rx="70" ry="20"/>
+    <ellipse cx="1280" cy="210" rx="140" ry="24"/><ellipse cx="1200" cy="192" rx="70" ry="18"/>
+    <ellipse cx="760" cy="110" rx="90" ry="16"/>
+  </g>
+  <!-- stars -->
+  <g fill="#fff" opacity=".8">
+    <circle cx="120" cy="60" r="2"/><circle cx="480" cy="40" r="1.6"/><circle cx="1040" cy="70" r="2"/>
+    <circle cx="1450" cy="50" r="1.6"/><circle cx="1320" cy="110" r="1.2"/><circle cx="620" cy="90" r="1.2"/>
+  </g>
+
+  <!-- sea -->
+  <rect y="540" width="1600" height="460" fill="url(#sea)"/>
+  <g stroke="#ffe3a8" stroke-width="3" stroke-linecap="round" opacity=".7">
+    <line x1="740" y1="560" x2="860" y2="560"/><line x1="760" y1="578" x2="840" y2="578"/>
+    <line x1="780" y1="596" x2="820" y2="596"/>
+  </g>
+  <g stroke="#9fd3e6" stroke-width="2" fill="none" opacity=".5">
+    <path d="M120 620q20-8 40 0t40 0"/><path d="M1380 640q20-8 40 0t40 0"/><path d="M1040 600q20-8 40 0t40 0"/>
+  </g>
+
+  <!-- pirate ship on the horizon -->
+  <g transform="translate(1290 465) scale(.75)" fill="#2a1a12">
+    <path d="M-90 60 L90 60 L70 88 L-70 88 Z"/>
+    <path d="M60 60 L110 40 L100 60 Z"/>
+    <rect x="-4" y="-80" width="6" height="142"/>
+    <rect x="-54" y="-50" width="5" height="112"/>
+    <rect x="44" y="-40" width="5" height="102"/>
+    <path d="M-38 -66 Q8 -50 -38 -12 Z M-38 -8 Q16 10 -38 44 Z" fill="#f4e6c4"/>
+    <path d="M-80 -40 Q-40 -26 -80 6 Z" fill="#f4e6c4"/>
+    <path d="M30 -30 Q72 -16 30 18 Z" fill="#f4e6c4"/>
+    <path d="M2 -80 L36 -72 L2 -64 Z" fill="#111"/>
+    <circle cx="-26" cy="-38" r="6" fill="#2a1a12"/>
+  </g>
+
+  <!-- island / beach -->
+  <path d="M-40 1000 L-40 760 Q300 650 800 690 Q1250 640 1640 740 L1640 1000 Z" fill="#f0d39a"/>
+  <path d="M-40 1000 L-40 790 Q300 690 800 720 Q1250 680 1640 770 L1640 1000 Z" fill="url(#grass)"/>
+  <!-- putting green -->
+  <ellipse cx="1240" cy="790" rx="230" ry="46" fill="#7ccc5e"/>
+  <ellipse cx="1240" cy="796" rx="12" ry="4" fill="#173d1c"/>
+  <!-- pin flag with skull -->
+  <rect x="1238" y="610" width="4" height="186" fill="#eee"/>
+  <path d="M1242 612 L1330 636 L1242 662 Z" fill="#c62828"/>
+  <g transform="translate(1272 637)" fill="#fff">
+    <circle r="9"/><rect x="-5" y="5" width="10" height="7" rx="2"/>
+    <circle cx="-3.5" cy="-1" r="2.6" fill="#c62828"/><circle cx="3.5" cy="-1" r="2.6" fill="#c62828"/>
+  </g>
+
+  <!-- palm tree -->
+  <g transform="translate(1470 800)">
+    <path d="M0 0 Q-12 -120 18 -250" stroke="#7a5230" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <g fill="#2f8a3a">
+      <path d="M18 -250 Q-60 -280 -120 -220 Q-60 -250 18 -244 Z"/>
+      <path d="M18 -250 Q90 -300 160 -240 Q90 -262 18 -244 Z"/>
+      <path d="M18 -250 Q-20 -330 -90 -320 Q-20 -300 18 -246 Z"/>
+      <path d="M18 -250 Q60 -340 130 -330 Q60 -300 18 -246 Z"/>
+      <path d="M18 -250 Q-30 -220 -60 -150 Q-10 -210 18 -244 Z"/>
+      <path d="M18 -250 Q70 -220 96 -150 Q50 -210 18 -244 Z"/>
+    </g>
+    <circle cx="8" cy="-240" r="9" fill="#6b4423"/><circle cx="26" cy="-238" r="9" fill="#6b4423"/>
+  </g>
+
+  <!-- treasure chest -->
+  <g transform="translate(60 850)">
+    <rect x="0" y="0" width="90" height="50" rx="4" fill="#7a4b1c" stroke="#3d2410" stroke-width="3"/>
+    <path d="M0 0 Q45 -40 90 0 Z" fill="#8f5a24" stroke="#3d2410" stroke-width="3"/>
+    <rect x="40" y="-4" width="10" height="18" fill="#e3b341"/>
+    <circle cx="20" cy="-8" r="7" fill="#ffd54a"/><circle cx="68" cy="-10" r="6" fill="#ffd54a"/>
+  </g>
+
+  <!-- ball flight -->
+  <path d="M410 812 Q820 380 1236 790" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" opacity=".9"/>
+  <circle cx="980" cy="520" r="8" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+
+  <!-- THE PIRATE (follow-through) -->
+  <g transform="translate(330 830)">
+    <ellipse cx="0" cy="4" rx="70" ry="10" fill="#000" opacity=".25"/>
+    <!-- peg leg -->
+    <path d="M14 -118 L26 0" stroke="#8a5a2b" stroke-width="12" stroke-linecap="round"/>
+    <!-- trouser leg + boot -->
+    <path d="M-30 -130 L-4 -130 L-18 -20 L-40 -20 Z" fill="#23365c"/>
+    <path d="M-46 -26 L-12 -26 L-8 0 L-58 0 Q-60 -10 -46 -26 Z" fill="#1a1a1a"/>
+    <path d="M-2 -130 L30 -130 L28 -110 L4 -110 Z" fill="#23365c"/>
+    <!-- coat -->
+    <path d="M-44 -230 L44 -230 L56 -120 L30 -110 L0 -140 L-30 -110 L-58 -120 Z" fill="#a8232a"/>
+    <path d="M-6 -230 L6 -230 L4 -140 L-4 -140 Z" fill="#f2e7c9"/>
+    <g fill="#e3b341"><circle cx="16" cy="-200" r="4"/><circle cx="16" cy="-180" r="4"/><circle cx="-16" cy="-200" r="4"/><circle cx="-16" cy="-180" r="4"/></g>
+    <rect x="-48" y="-158" width="96" height="14" fill="#1a1a1a"/>
+    <rect x="-10" y="-160" width="20" height="18" fill="none" stroke="#e3b341" stroke-width="4"/>
+    <!-- arms wrapping to left shoulder (follow-through) -->
+    <path d="M38 -224 Q30 -190 -10 -214 L-34 -238" stroke="#a8232a" stroke-width="22" fill="none" stroke-linecap="round"/>
+    <path d="M-40 -222 Q-60 -236 -44 -250" stroke="#8f1d23" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <circle cx="-42" cy="-252" r="11" fill="#e0a878"/>
+    <!-- club over the shoulder -->
+    <path d="M-42 -252 L-150 -170" stroke="#cfd6dc" stroke-width="6" stroke-linecap="round"/>
+    <path d="M-150 -170 L-172 -150 L-158 -142 L-140 -164 Z" fill="#9aa6b0"/>
+    <path d="M-42 -252 L-26 -264" stroke="#222" stroke-width="9" stroke-linecap="round"/>
+    <!-- head -->
+    <circle cx="4" cy="-266" r="32" fill="#e0a878"/>
+    <path d="M-26 -258 Q-30 -220 4 -212 Q38 -220 34 -258 Q20 -240 4 -244 Q-12 -240 -26 -258 Z" fill="#2b1a10"/>
+    <path d="M-10 -246 Q4 -240 18 -246" stroke="#7a2a20" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="18" cy="-272" r="4" fill="#1a1a1a"/>
+    <path d="M-28 -284 L34 -262" stroke="#1a1a1a" stroke-width="3"/>
+    <ellipse cx="-8" cy="-274" rx="11" ry="9" fill="#1a1a1a"/>
+    <path d="M30 -264 Q42 -262 36 -252" fill="#d49668"/>
+    <!-- tricorn hat -->
+    <path d="M-50 -286 Q4 -270 58 -286 Q46 -340 4 -334 Q-38 -340 -50 -286 Z" fill="#1a1a1a"/>
+    <path d="M-50 -286 Q4 -270 58 -286" stroke="#e3b341" stroke-width="4" fill="none"/>
+    <g transform="translate(4 -310)" fill="#f5f5f5">
+      <circle r="9"/><rect x="-5" y="5" width="10" height="6" rx="2"/>
+      <circle cx="-3.5" cy="-1" r="2.6" fill="#1a1a1a"/><circle cx="3.5" cy="-1" r="2.6" fill="#1a1a1a"/>
+      <path d="M-14 12 L14 20 M14 12 L-14 20" stroke="#f5f5f5" stroke-width="3"/>
+    </g>
+    <!-- parrot on right shoulder -->
+    <g transform="translate(46 -236)">
+      <path d="M0 0 Q-6 -30 12 -40 Q28 -38 26 -20 Q22 0 8 6 Z" fill="#2fa84f"/>
+      <path d="M8 6 L-2 34 L14 10 Z" fill="#1d6fd1"/>
+      <path d="M10 -36 Q22 -46 30 -34 Q22 -30 10 -36 Z" fill="#e53935"/>
+      <path d="M26 -30 L36 -26 L26 -22 Z" fill="#ffb300"/>
+      <circle cx="20" cy="-32" r="2.5" fill="#111"/>
+    </g>
+  </g>
+</svg>

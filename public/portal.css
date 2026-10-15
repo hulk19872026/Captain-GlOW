@@ -1,0 +1,31 @@
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:Georgia,"Times New Roman",serif;color:#2b1d0e;
+  background:#0d2a3f url("/static/background.svg") center bottom/cover no-repeat fixed;
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;
+}
+.card{
+  width:100%;max-width:420px;background:rgba(250,239,210,.94);
+  border:3px solid #7a4b1c;border-radius:14px;padding:24px 22px;
+  box-shadow:0 12px 40px rgba(0,0,0,.45);
+}
+.badge{font-size:34px;text-align:center}
+h1{margin:4px 0 6px;text-align:center;font-size:26px;color:#5a2d0c;letter-spacing:.5px}
+.sub{text-align:center;margin:0 0 16px;font-size:15px}
+label{display:block;font-size:14px;font-weight:bold;margin:10px 0}
+input[type=text],input:not([type]),input[type=email],input[type=tel]{
+  display:block;width:100%;margin-top:4px;padding:11px 12px;font-size:16px;
+  border:2px solid #b08a57;border-radius:8px;background:#fffaf0;font-family:inherit
+}
+input:focus{outline:none;border-color:#1f6f3a}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:normal;font-size:13px}
+.check input{margin-top:2px;width:18px;height:18px;flex:none}
+button,.button{
+  display:block;width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;
+  background:#1f6f3a;color:#fff;font-size:17px;font-weight:bold;font-family:inherit;
+  text-align:center;text-decoration:none;cursor:pointer
+}
+button:hover,.button:hover{background:#17592e}
+.error{background:#8b1e1e;color:#fff;padding:9px 12px;border-radius:8px;font-size:14px}
+@media (max-width:700px){body{background-attachment:scroll;background-position:28% bottom}}
