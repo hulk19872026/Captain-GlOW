@@ -19,7 +19,11 @@ const {
   UNIFI_API_KEY,
   UNIFI_SITE_ID,               // optional — auto-detected if blank
   UNIFI_INSECURE_TLS = 'false', // 'true' only for local self-signed console certs
-  SESSION_MINUTES = '480',      // how long a guest stays authorized
+  SESSION_MINUTES = '120',      // guest is kicked off after this many minutes
+  // A guest who leaves the Wi-Fi for this long must sign in again on return.
+  // A short grace period stops phones that briefly drop Wi-Fi (screen off) from
+  // being re-prompted constantly. Set to 0 to disable.
+  REAUTH_AFTER_DISCONNECT_MINUTES = '5',
   RATE_LIMIT_DOWN_KBPS,         // optional bandwidth caps
   RATE_LIMIT_UP_KBPS,
   ADMIN_PASSWORD,               // protects /admin/export.csv
@@ -110,6 +114,58 @@ async function authorizeGuest(mac) {
   if (RATE_LIMIT_DOWN_KBPS) body.rxRateLimitKbps = Number(RATE_LIMIT_DOWN_KBPS);
   if (RATE_LIMIT_UP_KBPS) body.txRateLimitKbps = Number(RATE_LIMIT_UP_KBPS);
   await unifi('POST', `/sites/${sid}/clients/${client.id}/actions`, body);
+  sessions.set(mac.toLowerCase(), { clientId: client.id, expiresAt: Date.now() + Number(SESSION_MINUTES) * 60000, goneSince: null, revokeOnReturn: false });
+}
+
+// ---------- Re-prompt guests who disconnect ----------
+// UniFi keeps a guest authorized for the whole time limit, even after they
+// leave. We watch the connected-client list and revoke guests who have been
+// gone longer than REAUTH_AFTER_DISCONNECT_MINUTES so the portal shows again.
+// Tracking is in memory: after a redeploy, existing guests simply run out
+// their time limit as normal.
+const sessions = new Map(); // mac -> { clientId, expiresAt, goneSince, revokeOnReturn }
+
+async function connectedClients(sid) {
+  const out = [];
+  for (let offset = 0; ; offset += 200) {
+    const r = await unifi('GET', `/sites/${sid}/clients?offset=${offset}&limit=200`);
+    const page = list(r);
+    out.push(...page);
+    if (page.length < 200 || (r.totalCount != null && out.length >= r.totalCount)) return out;
+  }
+}
+
+async function revoke(sid, clientId) {
+  await unifi('POST', `/sites/${sid}/clients/${clientId}/actions`, { action: 'UNAUTHORIZE_GUEST_ACCESS' });
+}
+
+async function sweepSessions() {
+  if (!sessions.size) return;
+  const graceMs = Number(REAUTH_AFTER_DISCONNECT_MINUTES) * 60000;
+  const sid = await siteId();
+  const online = new Map(
+    (await connectedClients(sid)).map((c) => [(c.macAddress || '').toLowerCase(), c])
+  );
+  const now = Date.now();
+  for (const [mac, s] of sessions) {
+    if (now >= s.expiresAt) { sessions.delete(mac); continue; } // UniFi expires it itself
+    const client = online.get(mac);
+    if (client) {
+      if (s.revokeOnReturn) {
+        // Couldn't revoke while they were away; do it now that they're back.
+        try { await revoke(sid, client.id); sessions.delete(mac); console.log(`Re-prompting returning guest ${mac}`); }
+        catch (e) { console.error(`Revoke ${mac} failed:`, e.message); }
+      } else {
+        s.goneSince = null;
+        s.clientId = client.id;
+      }
+      continue;
+    }
+    if (!s.goneSince) { s.goneSince = now; continue; }
+    if (now - s.goneSince < graceMs || s.revokeOnReturn) continue;
+    try { await revoke(sid, s.clientId); sessions.delete(mac); console.log(`Signed out disconnected guest ${mac}`); }
+    catch (e) { s.revokeOnReturn = true; console.warn(`Revoke ${mac} while away failed, will retry on return:`, e.message); }
+  }
 }
 
 // ---------- Helpers ----------
@@ -233,3 +289,7 @@ app.get('/admin/export.csv', async (req, res) => {
 initDb()
   .catch((e) => console.error('DB init failed:', e.message))
   .finally(() => app.listen(PORT, () => console.log(`Portal listening on :${PORT}`)));
+
+if (Number(REAUTH_AFTER_DISCONNECT_MINUTES) > 0) {
+  setInterval(() => sweepSessions().catch((e) => console.error('Session sweep failed:', e.message)), 60000).unref();
+}

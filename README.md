@@ -30,7 +30,8 @@ Requires UniFi Network **9.1 or newer** on the UDR7 (for the official API key + 
 | `UNIFI_API_KEY` | Site Manager API key (step 3) |
 | `ADMIN_PASSWORD` | a long password for downloading the list |
 | `BUSINESS_NAME` | `Captain Glow` (shown on the sign-in page) |
-| `SESSION_MINUTES` | `480` (how long guests stay connected; optional) |
+| `SESSION_MINUTES` | `120` (guests are kicked off after this many minutes; optional) |
+| `REAUTH_AFTER_DISCONNECT_MINUTES` | `5` (a guest gone this long sees the portal again when they return; `0` disables; optional) |
 | `SUCCESS_URL` | your website, shown after connecting (optional) |
 | `RATE_LIMIT_DOWN_KBPS` / `RATE_LIMIT_UP_KBPS` | optional speed caps, e.g. `20000` / `5000` |
 
