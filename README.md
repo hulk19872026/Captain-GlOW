@@ -73,6 +73,7 @@ The form has separate, unchecked boxes for email marketing and text marketing. O
 | Symptom | Fix |
 |---|---|
 | No splash page pops up | Railway domain missing from Pre-Authorization Allowances; HTTPS redirect still on |
+| `fetch failed` in Railway logs | Open `https://<your-domain>/admin/unifi-check` (user `admin`, password `ADMIN_PASSWORD`) — it shows the exact URL being called and the underlying reason (`ENOTFOUND` = typo in `UNIFI_BASE_URL`, `ECONNREFUSED`/timeout = pointing at a LAN IP like `192.168.1.1`, which Railway can't reach — use the `api.ui.com` connector URL) |
 | "Network hiccupped" after submitting | Check Railway **Logs** for `Authorize failed`. 401 = wrong API key; 404 = wrong console ID; make sure UniFi Network ≥ 9.1 |
 | "Could not detect your device" | The page was opened without UniFi's `?id=` parameter — reconnect to the guest Wi-Fi rather than opening the URL directly |
 | Want to run on your LAN instead | Set `UNIFI_BASE_URL=https://192.168.1.1`, create the key in **Network → Settings → Control Plane → Integrations**, and set `UNIFI_INSECURE_TLS=true` |

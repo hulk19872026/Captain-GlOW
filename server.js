@@ -3,7 +3,7 @@
 // guest device through the UniFi Network Integration API.
 import express from 'express';
 import pg from 'pg';
-import { Agent } from 'undici';
+import { Agent, fetch } from 'undici';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -56,17 +56,36 @@ async function initDb() {
 }
 
 // ---------- UniFi API ----------
+// Use undici's own fetch together with its Agent: handing an npm-undici Agent to
+// Node's built-in fetch breaks when the bundled undici version differs.
 const dispatcher = UNIFI_INSECURE_TLS === 'true' ? new Agent({ connect: { rejectUnauthorized: false } }) : undefined;
-const apiRoot = () => `${(UNIFI_BASE_URL || '').replace(/\/+$/, '')}/proxy/network/integration/v1`;
+// Tolerate common copy/paste variants: missing scheme, trailing slash, or the
+// full ".../proxy/network/integration/v1" path already included.
+const baseUrl = (() => {
+  let u = (UNIFI_BASE_URL || '').trim().replace(/\/+$/, '').replace(/\/proxy\/network(\/integration(\/v1)?)?$/, '');
+  if (u && !/^https?:\/\//i.test(u)) u = 'https://' + u;
+  return u;
+})();
+const apiRoot = () => `${baseUrl}/proxy/network/integration/v1`;
 let cachedSiteId = UNIFI_SITE_ID || null;
 
 async function unifi(method, p, body) {
-  const res = await fetch(apiRoot() + p, {
-    method,
-    headers: { 'X-API-KEY': UNIFI_API_KEY, Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}) },
-    body: body ? JSON.stringify(body) : undefined,
-    dispatcher
-  });
+  if (!baseUrl || !UNIFI_API_KEY) throw new Error('UNIFI_BASE_URL and UNIFI_API_KEY must be set');
+  let res;
+  try {
+    res = await fetch(apiRoot() + p, {
+      method,
+      headers: { 'X-API-KEY': UNIFI_API_KEY.trim(), Accept: 'application/json', ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+      dispatcher,
+      signal: AbortSignal.timeout(15000)
+    });
+  } catch (e) {
+    // "fetch failed" hides the real reason (DNS, TLS, refused, timeout) in e.cause.
+    const c = e.cause;
+    const why = c ? `${c.code || c.name || ''} ${c.message || ''}`.trim() : e.name === 'TimeoutError' ? 'timed out after 15s' : '';
+    throw new Error(`UniFi ${method} ${apiRoot() + p} -> ${e.message}${why ? ` (${why})` : ''}`);
+  }
   const text = await res.text();
   if (!res.ok) throw new Error(`UniFi ${method} ${p} -> ${res.status}: ${text.slice(0, 300)}`);
   return text ? JSON.parse(text) : {};
@@ -137,6 +156,21 @@ app.use('/static', express.static(path.join(__dirname, 'public'), { maxAge: '1d'
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
+// Connectivity check for the UniFi API: https://<app>/admin/unifi-check (user: admin, password: ADMIN_PASSWORD)
+const isAdmin = (req) => {
+  const [user, pass] = Buffer.from((req.get('authorization') || '').replace(/^Basic /, ''), 'base64').toString().split(':');
+  return Boolean(ADMIN_PASSWORD) && user === 'admin' && pass === ADMIN_PASSWORD;
+};
+app.get('/admin/unifi-check', async (req, res) => {
+  if (!isAdmin(req)) return res.set('WWW-Authenticate', 'Basic realm="admin"').status(401).send('Unauthorized');
+  try {
+    const sites = list(await unifi('GET', '/sites'));
+    res.json({ ok: true, apiRoot: apiRoot(), sites: sites.map((s) => ({ id: s.id, name: s.name })) });
+  } catch (e) {
+    res.status(502).json({ ok: false, apiRoot: apiRoot(), error: e.message });
+  }
+});
+
 // UniFi redirects guests to <portal>/guest/s/<site>/?id=<mac>&ap=...&url=...&ssid=...
 app.get(['/', '/guest/s/:site', '/guest/s/:site/'], (req, res) => res.send(formPage(req.query)));
 
@@ -184,10 +218,7 @@ app.post('/connect', async (req, res) => {
 
 // CSV export for campaigns: https://<app>/admin/export.csv  (user: admin, password: ADMIN_PASSWORD)
 app.get('/admin/export.csv', async (req, res) => {
-  const [user, pass] = Buffer.from((req.get('authorization') || '').replace(/^Basic /, ''), 'base64').toString().split(':');
-  if (!ADMIN_PASSWORD || user !== 'admin' || pass !== ADMIN_PASSWORD) {
-    return res.set('WWW-Authenticate', 'Basic realm="admin"').status(401).send('Unauthorized');
-  }
+  if (!isAdmin(req)) return res.set('WWW-Authenticate', 'Basic realm="admin"').status(401).send('Unauthorized');
   if (!pool) return res.status(500).send('No database configured');
   const { rows } = await pool.query(
     `SELECT DISTINCT ON (lower(email)) name,email,phone,marketing_email,marketing_sms,created_at
