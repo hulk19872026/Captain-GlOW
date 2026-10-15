@@ -62,7 +62,7 @@ const dispatcher = UNIFI_INSECURE_TLS === 'true' ? new Agent({ connect: { reject
 // Tolerate common copy/paste variants: missing scheme, trailing slash, or the
 // full ".../proxy/network/integration/v1" path already included.
 const baseUrl = (() => {
-  let u = (UNIFI_BASE_URL || '').trim().replace(/\/+$/, '').replace(/\/proxy\/network(\/integration(\/v1)?)?$/, '');
+  let u = (UNIFI_BASE_URL || '').trim().replace(/[<>\s]/g, '').replace(/\/+$/, '').replace(/\/proxy\/network(\/integration(\/v1)?)?$/, '');
   if (u && !/^https?:\/\//i.test(u)) u = 'https://' + u;
   return u;
 })();
