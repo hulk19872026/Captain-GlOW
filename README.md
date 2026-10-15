@@ -29,7 +29,7 @@ Requires UniFi Network **9.1 or newer** on the UDR7 (for the official API key + 
 | `UNIFI_BASE_URL` | `https://api.ui.com/v1/connector/consoles/<YOUR_CONSOLE_ID>` |
 | `UNIFI_API_KEY` | Site Manager API key (step 3) |
 | `ADMIN_PASSWORD` | a long password for downloading the list |
-| `BUSINESS_NAME` | `Pirate Golf` (or your business name) |
+| `BUSINESS_NAME` | `Captain Glow` (shown on the sign-in page) |
 | `SESSION_MINUTES` | `480` (how long guests stay connected; optional) |
 | `SUCCESS_URL` | your website, shown after connecting (optional) |
 | `RATE_LIMIT_DOWN_KBPS` / `RATE_LIMIT_UP_KBPS` | optional speed caps, e.g. `20000` / `5000` |

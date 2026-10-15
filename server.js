@@ -1,4 +1,4 @@
-// Pirate Golf guest Wi-Fi portal for UniFi (UDR7) external portal server.
+// Captain Glow guest Wi-Fi portal for UniFi (UDR7) external portal server.
 // Collects name / email / phone, stores them in Postgres, then authorizes the
 // guest device through the UniFi Network Integration API.
 import express from 'express';
@@ -23,7 +23,7 @@ const {
   RATE_LIMIT_DOWN_KBPS,         // optional bandwidth caps
   RATE_LIMIT_UP_KBPS,
   ADMIN_PASSWORD,               // protects /admin/export.csv
-  BUSINESS_NAME = 'Pirate Golf',
+  BUSINESS_NAME = 'Captain Glow',
   SUCCESS_URL                   // optional landing page after connecting
 } = process.env;
 
